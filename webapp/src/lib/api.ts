@@ -5,8 +5,9 @@
 const getApiUrl = (): string => {
   if (typeof window !== "undefined") {
     const hostname = window.location.hostname;
-    // If accessing via IP (e.g. 10.68.220.252) from mobile web, point to that IP's backend port
-    if (hostname !== "localhost" && hostname !== "127.0.0.1") {
+    // Only use local IP routing if we are accessing a local IP address (e.g. 10.68.220.252)
+    const isIpAddress = /^(\d{1,3}\.){3}\d{1,3}$/.test(hostname);
+    if (isIpAddress) {
       return `http://${hostname}:8000`;
     }
   }
