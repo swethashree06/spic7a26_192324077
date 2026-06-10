@@ -1,0 +1,7 @@
+[
+  {"path": "/", "method": "GET", "expected_access": "public"},
+  {"path": "/register", "method": "POST", "expected_access": "public"},
+  {"path": "/login", "method": "POST", "expected_access": "public"},
+  {"path": "/google-login", "method": "POST", "expected_access": "public"},
+  {"path": "/analyze", "method": "POST", "expected_access": "public"}
+]

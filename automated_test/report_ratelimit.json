@@ -1,0 +1,14 @@
+[
+  {
+    "endpoint": "/",
+    "method": "GET",
+    "role": "unauthenticated",
+    "status": 200,
+    "expected_status": 429,
+    "finding": true,
+    "severity": "Medium",
+    "test_category": "Rate Limiting",
+    "note": "No rate limiting detected after 30 requests.",
+    "timestamp": "2026-06-10 08:52:05"
+  }
+]

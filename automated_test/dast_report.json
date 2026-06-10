@@ -1,0 +1,211 @@
+{
+  "metadata": {
+    "timestamp": "2026-06-10T09:26:48.2960
+        "method": "POST",
+        "category": "Injection Detection",
+        "note": "SQLi probe (Comment) - checking57\",\n    \"base_url\": \"http://localhost:8000\",\n    \"total_endpoints\": 5,\n    \"total_tests_run\": 13\n  },\n  \"summary\": {\n    \"total_findings\": 4,\n    \"critical\": 2,\n    \"high\": 2,\n    \"medium\": 0,\n    \"low\": 0\n  },\n  \"findings_by_severity\": {\n    \"HIGH\": [\n      {\n        \"endpoint\": \"/register\", for error patterns",
+    "status_code": 403
+  },
+{
+  "endpoint": "/",
+  "method": "OPTIONS",
+  "category": "CORS",
+  "note": "CORS allows: http://attacker.com",
+  "status_code": 200
+}
+],
+"CRITICAL": [
+{
+"endpoint": "/",
+"method": "GET",
+        "category": "Rate Limiting",
+        "note": "No rate limit detected",
+        "status_code": 200
+      },
+      {
+        "endpoint": "/analyze",
+        "method": "POST",
+        "category": "Unauthenticated Access",
+        "note": "Unauthenticated file upload accepted - potential IDOR/abuse",
+        "status_code": 200
+      }
+    ]
+  },
+  "findings_by_category": {
+    "Injection Detection": 1,
+    "Rate Limiting": 1,
+    "Unauthenticated Access": 1,
+    "CORS": 1
+  },
+  "test_results": [
+    {
+      "endpoint": "/analyze",
+      "method": "POST",
+      "role": "public",
+      "status": 422,
+      "expected_status": 401,
+      "finding": false,
+      "severity": "INFO",
+      "response_time_ms": 2087.96,
+      "test_category": "AuthN Bypass",
+      "note": "No auth required - file upload endpoint accepts unauthenticated requests",
+      "timestamp": "2026-06-10T09:21:24.761161"
+    },
+    {
+      "endpoint": "/analyze",
+      "method": "POST",
+      "role": "invalid_empty",
+      "status": 422,
+      "expected_status": 401,
+      "finding": false,
+      "severity": "INFO",
+      "response_time_ms": 2016.9,
+      "test_category": "AuthN Bypass",
+      "note": "Malformed token (empty) - should return 401",
+      "timestamp": "2026-06-10T09:21:26.779487"
+    },
+    {
+      "endpoint": "/analyze",
+      "method": "POST",
+      "role": "invalid_garbage",
+      "status": 422,
+      "expected_status": 401,
+      "finding": false,
+      "severity": "INFO",
+      "response_time_ms": 2024.5,
+      "test_category": "AuthN Bypass",
+      "note": "Malformed token (garbage) - should return 401",
+      "timestamp": "2026-06-10T09:21:28.804396"
+    },
+    {
+      "endpoint": "/analyze",
+      "method": "POST",
+      "role": "invalid_expired",
+      "status": 422,
+      "expected_status": 401,
+      "finding": false,
+      "severity": "INFO",
+      "response_time_ms": 2039.47,
+      "test_category": "AuthN Bypass",
+      "note": "Malformed token (expired) - should return 401",
+      "timestamp": "2026-06-10T09:21:30.844106"
+    },
+    {
+      "endpoint": "/register",
+      "method": "POST",
+      "role": "public",
+      "status": 200,
+      "expected_status": 200,
+      "finding": false,
+      "severity": "INFO",
+      "response_time_ms": 4791.0,
+      "test_category": "Registration",
+      "note": "Registered user: dasttest_1781063490@mailinator.com",
+      "timestamp": "2026-06-10T09:21:35.638082"
+    },
+    {
+      "endpoint": "/login",
+      "method": "POST",
+      "role": "user",
+      "status": 200,
+      "expected_status": 200,
+      "finding": false,
+      "severity": "INFO",
+      "response_time_ms": 3981.63,
+      "test_category": "Authentication",
+      "note": "Logged in: dasttest_1781063490@mailinator.com",
+      "timestamp": "2026-06-10T09:21:39.621652"
+    },
+    {
+      "endpoint": "/analyze",
+      "method": "POST",
+      "role": "tampered",
+      "status": 422,
+      "expected_status": 401,
+      "finding": false,
+      "severity": "INFO",
+      "response_time_ms": 2053.98,
+      "test_category": "Token Tampering",
+      "note": "Tampered JWT signature - server should reject",
+      "timestamp": "2026-06-10T09:21:41.676618"
+    },
+    {
+      "endpoint": "/register",
+      "method": "POST",
+      "role": "public",
+      "status": 400,
+      "expected_status": 400,
+      "finding": false,
+      "severity": "INFO",
+      "response_time_ms": 3923.68,
+      "test_category": "Injection Detection",
+      "note": "SQLi probe (Single Quote) - checking for error patterns",
+      "timestamp": "2026-06-10T09:21:45.602320"
+    },
+    {
+      "endpoint": "/register",
+      "method": "POST",
+      "role": "public",
+      "status": 400,
+      "expected_status": 400,
+      "finding": false,
+      "severity": "INFO",
+      "response_time_ms": 4272.93,
+      "test_category": "Injection Detection",
+      "note": "SQLi probe (Union Select) - checking for error patterns",
+      "timestamp": "2026-06-10T09:21:49.875306"
+    },
+    {
+      "endpoint": "/register",
+      "method": "POST",
+      "role": "public",
+      "status": 403,
+      "expected_status": 400,
+      "finding": true,
+      "severity": "HIGH",
+      "response_time_ms": 3705.94,
+      "test_category": "Injection Detection",
+      "note": "SQLi probe (Comment) - checking for error patterns",
+      "timestamp": "2026-06-10T09:21:53.581309"
+    },
+    {
+      "endpoint": "/",
+      "method": "GET",
+      "role": "burst",
+      "status": 200,
+      "expected_status": 200,
+      "finding": true,
+      "severity": "CRITICAL",
+      "response_time_ms": 2043.69,
+      "test_category": "Rate Limiting",
+      "note": "No rate limit detected",
+      "timestamp": "2026-06-10T09:22:56.410201"
+    },
+    {
+      "endpoint": "/analyze",
+      "method": "POST",
+      "role": "public",
+      "status": 200,
+      "expected_status": 401,
+      "finding": true,
+      "severity": "CRITICAL",
+      "response_time_ms": 2053.54,
+      "test_category": "Unauthenticated Access",
+      "note": "Unauthenticated file upload accepted - potential IDOR/abuse",
+      "timestamp": "2026-06-10T09:22:58.464788"
+    },
+    {
+      "endpoint": "/",
+      "method": "OPTIONS",
+      "role": "public",
+      "status": 200,
+      "expected_status": 200,
+      "finding": true,
+      "severity": "HIGH",
+      "response_time_ms": 2019.97,
+      "test_category": "CORS",
+      "note": "CORS allows: http://attacker.com",
+      "timestamp": "2026-06-10T09:23:00.488371"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "timestamp": "2026-06-10T09:20:25.862065",
+  "base_url": "http://localhost:8000",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/",
+      "access_level": "public",
+      "auth_required": false,
+      "roles": [],
+      "notes": "Home endpoint - returns status and domain count"
+    },
+    {
+      "method": "POST",
+      "path": "/register",
+      "access_level": "public",
+      "auth_required": false,
+      "roles": [],
+      "notes": "User registration - public, creates new account"
+    },
+    {
+      "method": "POST",
+      "path": "/login",
+      "access_level": "public",
+      "auth_required": false,
+      "roles": [],
+      "notes": "User authentication - public, returns JWT token"
+    },
+    {
+      "method": "POST",
+      "path": "/google-login",
+      "access_level": "public",
+      "auth_required": false,
+      "roles": [],
+      "notes": "Google OAuth login - public, exchanges Google ID token"
+    },
+    {
+      "method": "POST",
+      "path": "/analyze",
+      "access_level": "requires-investigation",
+      "auth_required": false,
+      "roles": [],
+      "notes": "Resume analysis - NO EXPLICIT AUTH CHECK IN CODE - POTENTIAL VULNERABILITY"
+    }
+  ]
+}

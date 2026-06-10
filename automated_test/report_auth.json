@@ -1,0 +1,26 @@
+[
+  {
+    "endpoint": "/analyze",
+    "method": "POST",
+    "role": "unauthenticated",
+    "status": 200,
+    "expected_status": 401,
+
+  {
+    "endpoint": "/",
+    "method": "GET",
+    "role": "unauthenticated",
+    "status": 200,
+    "expected_status": 200,
+    "finding": false,
+    "severity": "Low",    "finding": true,
+    "severity": "High",
+    "test_category": "AuthN Bypass",
+    "note": "Endpoint processed resume and saved to DB (user_id:1) without authentication.",
+    "timestamp": "2026-06-10 08:51:01"
+  },
+    "test_category": "Basic Connectivity",
+    "note": "Public home page",
+    "timestamp": "2026-06-10 08:51:03"
+  }
+]

@@ -1,0 +1,422 @@
+{
+  "assessment_metadata": {
+    "title": "DAST Security Assessment Report",
+    "target_application": "SkillSync AI Backend API",
+    "assessment_type": "Dynamic Application Security Testing (DAST)",
+    "timestamp": "2026-06-10T09:26:48.296057",
+    "base_url": "http://localhost:8000",
+    "assessment_status": "COMPLETE"
+  },
+  "execution_summary": {
+    "total_endpoints_discovered": 5,
+    "total_test_cases_executed": 13,
+    "total_vulnerabilities_found": 4,
+    "severity_breakdown": {
+      "CRITICAL": 2,
+      "HIGH": 2,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "hardcoded_secrets_found": 0,
+    "execution_time_minutes": 8,
+    "status": "CRITICAL VULNERABILITIES IDENTIFIED - ACTION REQUIRED"
+  },
+  "critical_findings_summary": [
+    {
+      "id": 1,
+      "title": "UNAUTHENTICATED FILE UPLOAD",
+      "severity": "CRITICAL",
+      "endpoint": "POST /analyze",
+      "risk_level": 9,
+      "description": "File upload endpoint accepts requests without any authentication or authorization checks",
+      "impact": [
+        "Attackers can upload unlimited files",
+        "Storage exhaustion and DoS attacks",
+        "Potential malware upload and server compromise",
+        "IDOR vulnerabilities if file IDs are predictable",
+        "Data theft if files contain sensitive information"
+      ],
+      "time_to_fix_hours": 3,
+      "priority": "IMMEDIATE - Fix within 24 hours"
+    },
+    {
+      "id": 2,
+      "title": "NO RATE LIMITING",
+      "severity": "CRITICAL",
+      "endpoint": "ALL ENDPOINTS",
+      "risk_level": 8,
+      "description": "No request rate limiting or DDoS protection detected on any endpoint",
+      "impact": [
+        "Brute force attacks on authentication endpoints",
+        "Account enumeration possible",
+        "Spam account creation (10,000s of fake accounts)",
+        "Resource exhaustion and service disruption",
+        "DDoS attacks from botnet clusters"
+      ],
+      "time_to_fix_hours": 4,
+      "priority": "IMMEDIATE - Fix within 24 hours"
+    },
+    {
+      "id": 3,
+      "title": "CORS MISCONFIGURATION",
+      "severity": "HIGH",
+      "endpoint": "All endpoints",
+      "risk_level": 7,
+      "description": "CORS allows all origins (allow_origin_regex=r'https?://.*')",
+      "impact": [
+        "CSRF (Cross-Site Request Forgery) attacks from any website",
+        "Session hijacking possible",
+        "Unauthorized data modification"
+      ],
+      "time_to_fix_hours": 1,
+      "priority": "This week"
+    },
+    {
+      "id": 4,
+      "title": "DATABASE ERROR INFORMATION LEAK",
+      "severity": "HIGH",
+      "endpoint": "POST /register",
+      "risk_level": 6,
+      "description": "SQL error patterns exposed in error responses, revealing database structure",
+      "impact": [
+        "Attacker can infer database schema",
+        "Enable targeted SQL injection attacks",
+        "Information disclosure vulnerability",
+        "Aide in reconnaissance for further attacks"
+      ],
+      "time_to_fix_hours": 1,
+      "priority": "This week"
+    }
+  ],
+  "api_endpoints_specification": {
+    "discovery_timestamp": "2026-06-10T09:20:25.862065",
+    "total_endpoints": 5,
+    "endpoints": [
+      {
+        "id": 1,
+        "method": "GET",
+        "path": "/",
+        "name": "Home",
+        "access_level": "public",
+        "auth_required": false,
+        "roles": [],
+        "description": "Home endpoint - returns status and domain count",
+        "status_live": 200
+      },
+      {
+        "id": 2,
+        "method": "POST",
+        "path": "/register",
+        "name": "User Registration",
+        "access_level": "public",
+        "auth_required": false,
+        "roles": [],
+        "description": "User registration - public, creates new account"
+      },
+      {
+        "id": 3,
+        "method": "POST",
+        "path": "/login",
+        "name": "User Login",
+        "access_level": "public",
+        "auth_required": false,
+        "roles": [],
+        "description": "User authentication - public, returns JWT token"
+      },
+      {
+        "id": 4,
+        "method": "POST",
+        "path": "/google-login",
+        "name": "Google OAuth Login",
+        "access_level": "public",
+        "auth_required": false,
+        "roles": [],
+        "description": "Google OAuth login - public, exchanges Google ID token"
+      },
+      {
+        "id": 5,
+        "method": "POST",
+        "path": "/analyze",
+        "name": "Resume Analysis",
+        "access_level": "requires-investigation",
+        "auth_required": false,
+        "roles": [],
+        "description": "Resume analysis - NO EXPLICIT AUTH CHECK IN CODE - POTENTIAL VULNERABILITY",
+        "status_live": 200,
+        "vulnerability_flag": true
+      }
+    ]
+  },
+  "findings_by_severity": {
+    "CRITICAL": [
+      {
+        "endpoint": "/",
+        "method": "GET",
+        "category": "Rate Limiting",
+        "severity": "CRITICAL",
+        "note": "No rate limit detected - sent 30 burst requests, all succeeded",
+        "status_code": 200,
+        "risk_score": 9
+      },
+      {
+        "endpoint": "/analyze",
+        "method": "POST",
+        "category": "Unauthenticated Access",
+        "severity": "CRITICAL",
+        "note": "Unauthenticated file upload accepted - potential IDOR/abuse",
+        "status_code": 200,
+        "risk_score": 9
+      }
+    ],
+    "HIGH": [
+      {
+        "endpoint": "/register",
+        "method": "POST",
+        "category": "Injection Detection",
+        "severity": "HIGH",
+        "note": "SQLi probe (Comment) - SQL error pattern detected in response",
+        "status_code": 403,
+        "risk_score": 7
+      },
+      {
+        "endpoint": "/",
+        "method": "OPTIONS",
+        "category": "CORS",
+        "severity": "HIGH",
+        "note": "CORS allows: http://attacker.com - all origins permitted",
+        "status_code": 200,
+        "risk_score": 7
+      }
+    ]
+  },
+  "findings_by_category": {
+    "Rate Limiting": 1,
+    "Unauthenticated Access": 1,
+    "Injection Detection": 3,
+    "CORS": 1,
+    "AuthN Bypass": 4,
+    "Authentication": 1,
+    "Token Tampering": 1,
+    "Registration": 1
+  },
+  "detailed_test_results": [
+    {
+      "test_id": 1,
+      "endpoint": "/analyze",
+      "method": "POST",
+      "role": "public",
+      "status": 422,
+      "expected_status": 401,
+      "finding": false,
+      "severity": "INFO",
+      "response_time_ms": 2087.96,
+      "test_category": "AuthN Bypass",
+      "note": "No auth required - file upload endpoint accepts unauthenticated requests",
+      "timestamp": "2026-06-10T09:21:24.761161"
+    },
+    {
+      "test_id": 2,
+      "endpoint": "/analyze",
+      "method": "POST",
+      "role": "invalid_empty",
+      "status": 422,
+      "expected_status": 401,
+      "finding": false,
+      "severity": "INFO",
+      "response_time_ms": 2016.9,
+      "test_category": "AuthN Bypass",
+      "note": "Malformed token (empty) - should return 401",
+      "timestamp": "2026-06-10T09:21:26.779487"
+    },
+    {
+      "test_id": 3,
+      "endpoint": "/analyze",
+      "method": "POST",
+      "role": "invalid_garbage",
+      "status": 422,
+      "expected_status": 401,
+      "finding": false,
+      "severity": "INFO",
+      "response_time_ms": 2024.5,
+      "test_category": "AuthN Bypass",
+      "note": "Malformed token (garbage) - should return 401",
+      "timestamp": "2026-06-10T09:21:28.804396"
+    },
+    {
+      "test_id": 4,
+      "endpoint": "/analyze",
+      "method": "POST",
+      "role": "invalid_expired",
+      "status": 422,
+      "expected_status": 401,
+      "finding": false,
+      "severity": "INFO",
+      "response_time_ms": 2039.47,
+      "test_category": "AuthN Bypass",
+      "note": "Malformed token (expired) - should return 401",
+      "timestamp": "2026-06-10T09:21:30.844106"
+    },
+    {
+      "test_id": 5,
+      "endpoint": "/register",
+      "method": "POST",
+      "role": "public",
+      "status": 200,
+      "expected_status": 200,
+      "finding": false,
+      "severity": "INFO",
+      "response_time_ms": 4791.0,
+      "test_category": "Registration",
+      "note": "Registered user: dasttest_1781063490@mailinator.com",
+      "timestamp": "2026-06-10T09:21:35.638082"
+    },
+    {
+      "test_id": 6,
+      "endpoint": "/login",
+      "method": "POST",
+      "role": "user",
+      "status": 200,
+      "expected_status": 200,
+      "finding": false,
+      "severity": "INFO",
+      "response_time_ms": 3981.63,
+      "test_category": "Authentication",
+      "note": "Logged in: dasttest_1781063490@mailinator.com",
+      "timestamp": "2026-06-10T09:21:39.621652"
+    },
+    {
+      "test_id": 7,
+      "endpoint": "/analyze",
+      "method": "POST",
+      "role": "tampered",
+      "status": 422,
+      "expected_status": 401,
+      "finding": false,
+      "severity": "INFO",
+      "response_time_ms": 2053.98,
+      "test_category": "Token Tampering",
+      "note": "Tampered JWT signature - server should reject",
+      "timestamp": "2026-06-10T09:21:41.676618"
+    },
+    {
+      "test_id": 8,
+      "endpoint": "/register",
+      "method": "POST",
+      "role": "public",
+      "status": 400,
+      "expected_status": 400,
+      "finding": false,
+      "severity": "INFO",
+      "response_time_ms": 3923.68,
+      "test_category": "Injection Detection",
+      "note": "SQLi probe (Single Quote) - checking for error patterns",
+      "timestamp": "2026-06-10T09:21:45.602320"
+    },
+    {
+      "test_id": 9,
+      "endpoint": "/register",
+      "method": "POST",
+      "role": "public",
+      "status": 400,
+      "expected_status": 400,
+      "finding": false,
+      "severity": "INFO",
+      "response_time_ms": 4272.93,
+      "test_category": "Injection Detection",
+      "note": "SQLi probe (Union Select) - checking for error patterns",
+      "timestamp": "2026-06-10T09:21:49.875306"
+    },
+    {
+      "test_id": 10,
+      "endpoint": "/register",
+      "method": "POST",
+      "role": "public",
+      "status": 403,
+      "expected_status": 400,
+      "finding": true,
+      "severity": "HIGH",
+      "response_time_ms": 3705.94,
+      "test_category": "Injection Detection",
+      "note": "SQLi probe (Comment) - SQL error pattern detected in response",
+      "timestamp": "2026-06-10T09:21:53.581309"
+    },
+    {
+      "test_id": 11,
+      "endpoint": "/",
+      "method": "GET",
+      "role": "burst",
+      "status": 200,
+      "expected_status": 200,
+      "finding": true,
+      "severity": "CRITICAL",
+      "response_time_ms": 2043.69,
+      "test_category": "Rate Limiting",
+      "note": "No rate limit detected - 30 burst requests all succeeded",
+      "timestamp": "2026-06-10T09:22:56.410201"
+    },
+    {
+      "test_id": 12,
+      "endpoint": "/analyze",
+      "method": "POST",
+      "role": "public",
+      "status": 200,
+      "expected_status": 401,
+      "finding": true,
+      "severity": "CRITICAL",
+      "response_time_ms": 2053.54,
+      "test_category": "Unauthenticated Access",
+      "note": "Unauthenticated file upload accepted - potential IDOR/abuse",
+      "timestamp": "2026-06-10T09:22:58.464788"
+    },
+    {
+      "test_id": 13,
+      "endpoint": "/",
+      "method": "OPTIONS",
+      "role": "public",
+      "status": 200,
+      "expected_status": 200,
+      "finding": true,
+      "severity": "HIGH",
+      "response_time_ms": 2019.97,
+      "test_category": "CORS",
+      "note": "CORS allows: http://attacker.com - all external origins permitted",
+      "timestamp": "2026-06-10T09:23:00.488371"
+    }
+  ],
+  "remediation_roadmap": {
+    "immediate_critical_fixes": [
+      {
+        "priority": 1,
+        "title": "Add JWT Authentication to /analyze",
+        "severity": "CRITICAL",
+        "time_to_fix_hours": 2,
+        "deadline": "24 hours"
+      },
+      {
+        "priority": 2,
+        "title": "Implement Rate Limiting",
+        "severity": "CRITICAL",
+        "time_to_fix_hours": 3,
+        "deadline": "24 hours"
+      },
+      {
+        "priority": 3,
+        "title": "Fix CORS Configuration",
+        "severity": "HIGH",
+        "time_to_fix_hours": 1,
+        "deadline": "Week 1"
+      },
+      {
+        "priority": 4,
+        "title": "Generic Error Messages",
+        "severity": "HIGH",
+        "time_to_fix_hours": 1,
+        "deadline": "Week 1"
+      }
+    ]
+  },
+  "assessment_conclusion": {
+    "overall_status": "CRITICAL VULNERABILITIES FOUND",
+    "recommendation": "IMMEDIATE ACTION REQUIRED - Fix all CRITICAL vulnerabilities within 24 hours"
+  }
+}

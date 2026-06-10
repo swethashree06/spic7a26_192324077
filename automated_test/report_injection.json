@@ -1,0 +1,26 @@
+[
+  {
+    "endpoint": "/login",
+    "method": "POST",
+    "role": "unauthenticated",
+    "status": 400,
+    "expected_status": 400,
+    "finding": false,
+    "severity": "Low",
+    "test_category": "Injection",
+    "note": "Payload type: SQLi. Input handled or rejected correctly.",
+    "timestamp": "2026-06-10 08:53:02"
+  },
+  {
+    "endpoint": "/login",
+    "method": "POST",
+    "role": "unauthenticated",
+    "status": 400,
+    "expected_status": 400,
+    "finding": false,
+    "severity": "Low",
+    "test_category": "Injection",
+    "note": "Payload type: SQLi. Input handled or rejected correctly.",
+    "timestamp": "2026-06-10 08:53:06"
+  }
+]
