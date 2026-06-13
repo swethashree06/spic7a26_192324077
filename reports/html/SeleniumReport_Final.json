@@ -1,0 +1,256 @@
+{
+  "stats": {
+    "suites": 2,
+    "tests": 4,
+    "passes": 4,
+    "pending": 0,
+    "failures": 0,
+    "start": "2026-06-10T08:57:21.558Z",
+    "end": "2026-06-10T08:57:44.033Z",
+    "duration": 22475,
+    "testsRegistered": 4,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "23a14dd4-f580-4b48-a9af-158b7fb5c479",
+      "title": "",
+      "fullFile": "",
+      "file": "",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "76858783-8ad6-4038-9423-0fd7c754a9a3",
+          "title": "Selenium Automation - Desktop Web",
+          "fullFile": "C:\\Users\\hp\\AndroidStudioProjects\\skillsyncaiapp\\web-tests\\tests\\unified_web.test.js",
+          "file": "\\web-tests\\tests\\unified_web.test.js",
+          "beforeHooks": [
+            {
+              "title": "\"before all\" hook in \"Selenium Automation - Desktop Web\"",
+              "fullTitle": "Selenium Automation - Desktop Web \"before all\" hook in \"Selenium Automation - Desktop Web\"",
+              "timedOut": false,
+              "duration": 1247,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const options = new chrome.Options();\noptions.addArguments('--headless');\noptions.addArguments('--no-sandbox');\noptions.addArguments('--disable-dev-shm-usage');\nif (platform.mobileEmulation) {\n    options.setMobileEmulation(platform.mobileEmulation);\n}\ndriver = await new Builder()\n    .forBrowser('chrome')\n    .setChromeOptions(options)\n    .build();\nawait driver.manage().window().setRect({ width: platform.width, height: platform.height });\nloginPage = new LoginPage(driver);\ndashboardPage = new DashboardPage(driver);",
+              "err": {},
+              "uuid": "e433ed6e-444c-4dca-8363-c75e9d0d4493",
+              "parentUUID": "76858783-8ad6-4038-9423-0fd7c754a9a3",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "afterHooks": [
+            {
+              "title": "\"after all\" hook in \"Selenium Automation - Desktop Web\"",
+              "fullTitle": "Selenium Automation - Desktop Web \"after all\" hook in \"Selenium Automation - Desktop Web\"",
+              "timedOut": false,
+              "duration": 11619,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "if (driver) await driver.quit();\n// Save report only after both platforms are done\nif (platform.name === platforms[platforms.length - 1].name) {\n    await ExcelReport.saveReport();\n}",
+              "err": {},
+              "uuid": "73bf5b25-2ab3-4fc3-9a5b-3b0f8a7df938",
+              "parentUUID": "76858783-8ad6-4038-9423-0fd7c754a9a3",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "tests": [
+            {
+              "title": "[Desktop Web] - Should load landing page and navigate to login",
+              "fullTitle": "Selenium Automation - Desktop Web [Desktop Web] - Should load landing page and navigate to login",
+              "timedOut": false,
+              "duration": 1603,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const startTime = Date.now();\nconst tcId = platform.mobileEmulation ? 'MW_TC_001' : 'DW_TC_001';\ntry {\n    await loginPage.open(baseUrl);\n    const title = await driver.getTitle();\n    expect(title).to.include('SkillSyncAI');\n    await ExcelReport.addResult({\n        id: tcId,\n        module: platform.name,\n        name: 'Page Load',\n        status: 'PASS',\n        time: `${Date.now() - startTime}ms`,\n        remarks: 'Success'\n    });\n} catch (error) {\n    const screenshot = await ScreenshotUtil.takeScreenshot(driver, `Fail_${tcId}`);\n    await ExcelReport.addResult({\n        id: tcId,\n        module: platform.name,\n        name: 'Page Load',\n        status: 'FAIL',\n        time: `${Date.now() - startTime}ms`,\n        screenshot: screenshot,\n        remarks: error.message\n    });\n    throw error;\n}",
+              "err": {},
+              "uuid": "24f05104-823a-40cc-96c8-85a43d0e4bff",
+              "parentUUID": "76858783-8ad6-4038-9423-0fd7c754a9a3",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "[Desktop Web] - Should display login fields correctly",
+              "fullTitle": "Selenium Automation - Desktop Web [Desktop Web] - Should display login fields correctly",
+              "timedOut": false,
+              "duration": 779,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const startTime = Date.now();\nconst tcId = platform.mobileEmulation ? 'MW_TC_002' : 'DW_TC_002';\ntry {\n    // Already at login page from previous test if using same session,\n    // but let's be explicit\n    await loginPage.open(baseUrl);\n    const isEmailVisible = await driver.findElement(loginPage.emailField).isDisplayed();\n    const isPassVisible = await driver.findElement(loginPage.passwordField).isDisplayed();\n    expect(isEmailVisible).to.be.true;\n    expect(isPassVisible).to.be.true;\n    await ExcelReport.addResult({\n        id: tcId,\n        module: platform.name,\n        name: 'Login UI Check',\n        status: 'PASS',\n        time: `${Date.now() - startTime}ms`,\n        remarks: 'Fields visible'\n    });\n} catch (error) {\n    const screenshot = await ScreenshotUtil.takeScreenshot(driver, `Fail_${tcId}`);\n    await ExcelReport.addResult({\n        id: tcId,\n        module: platform.name,\n        name: 'Login UI Check',\n        status: 'FAIL',\n        time: `${Date.now() - startTime}ms`,\n        screenshot: screenshot,\n        remarks: error.message\n    });\n    throw error;\n}",
+              "err": {},
+              "uuid": "2b0e1d1c-ed40-4892-b420-eea9cdb27e77",
+              "parentUUID": "76858783-8ad6-4038-9423-0fd7c754a9a3",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "24f05104-823a-40cc-96c8-85a43d0e4bff",
+            "2b0e1d1c-ed40-4892-b420-eea9cdb27e77"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 2382,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 120000
+        },
+        {
+          "uuid": "f05f3c9c-b335-4335-8e3a-cf488b848af7",
+          "title": "Selenium Automation - Mobile Web (iPhone 12 Pro)",
+          "fullFile": "C:\\Users\\hp\\AndroidStudioProjects\\skillsyncaiapp\\web-tests\\tests\\unified_web.test.js",
+          "file": "\\web-tests\\tests\\unified_web.test.js",
+          "beforeHooks": [
+            {
+              "title": "\"before all\" hook in \"Selenium Automation - Mobile Web (iPhone 12 Pro)\"",
+              "fullTitle": "Selenium Automation - Mobile Web (iPhone 12 Pro) \"before all\" hook in \"Selenium Automation - Mobile Web (iPhone 12 Pro)\"",
+              "timedOut": false,
+              "duration": 1517,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const options = new chrome.Options();\noptions.addArguments('--headless');\noptions.addArguments('--no-sandbox');\noptions.addArguments('--disable-dev-shm-usage');\nif (platform.mobileEmulation) {\n    options.setMobileEmulation(platform.mobileEmulation);\n}\ndriver = await new Builder()\n    .forBrowser('chrome')\n    .setChromeOptions(options)\n    .build();\nawait driver.manage().window().setRect({ width: platform.width, height: platform.height });\nloginPage = new LoginPage(driver);\ndashboardPage = new DashboardPage(driver);",
+              "err": {},
+              "uuid": "60797060-c905-4dc1-8e40-4eeb77883b84",
+              "parentUUID": "f05f3c9c-b335-4335-8e3a-cf488b848af7",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "afterHooks": [
+            {
+              "title": "\"after all\" hook in \"Selenium Automation - Mobile Web (iPhone 12 Pro)\"",
+              "fullTitle": "Selenium Automation - Mobile Web (iPhone 12 Pro) \"after all\" hook in \"Selenium Automation - Mobile Web (iPhone 12 Pro)\"",
+              "timedOut": false,
+              "duration": 3089,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "if (driver) await driver.quit();\n// Save report only after both platforms are done\nif (platform.name === platforms[platforms.length - 1].name) {\n    await ExcelReport.saveReport();\n}",
+              "err": {},
+              "uuid": "1b5a7bd0-f463-4034-aec4-c60cca7f501c",
+              "parentUUID": "f05f3c9c-b335-4335-8e3a-cf488b848af7",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "tests": [
+            {
+              "title": "[Mobile Web (iPhone 12 Pro)] - Should load landing page and navigate to login",
+              "fullTitle": "Selenium Automation - Mobile Web (iPhone 12 Pro) [Mobile Web (iPhone 12 Pro)] - Should load landing page and navigate to login",
+              "timedOut": false,
+              "duration": 1699,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const startTime = Date.now();\nconst tcId = platform.mobileEmulation ? 'MW_TC_001' : 'DW_TC_001';\ntry {\n    await loginPage.open(baseUrl);\n    const title = await driver.getTitle();\n    expect(title).to.include('SkillSyncAI');\n    await ExcelReport.addResult({\n        id: tcId,\n        module: platform.name,\n        name: 'Page Load',\n        status: 'PASS',\n        time: `${Date.now() - startTime}ms`,\n        remarks: 'Success'\n    });\n} catch (error) {\n    const screenshot = await ScreenshotUtil.takeScreenshot(driver, `Fail_${tcId}`);\n    await ExcelReport.addResult({\n        id: tcId,\n        module: platform.name,\n        name: 'Page Load',\n        status: 'FAIL',\n        time: `${Date.now() - startTime}ms`,\n        screenshot: screenshot,\n        remarks: error.message\n    });\n    throw error;\n}",
+              "err": {},
+              "uuid": "b55dfb85-a079-4963-9798-b6d831a9cae4",
+              "parentUUID": "f05f3c9c-b335-4335-8e3a-cf488b848af7",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "[Mobile Web (iPhone 12 Pro)] - Should display login fields correctly",
+              "fullTitle": "Selenium Automation - Mobile Web (iPhone 12 Pro) [Mobile Web (iPhone 12 Pro)] - Should display login fields correctly",
+              "timedOut": false,
+              "duration": 906,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const startTime = Date.now();\nconst tcId = platform.mobileEmulation ? 'MW_TC_002' : 'DW_TC_002';\ntry {\n    // Already at login page from previous test if using same session,\n    // but let's be explicit\n    await loginPage.open(baseUrl);\n    const isEmailVisible = await driver.findElement(loginPage.emailField).isDisplayed();\n    const isPassVisible = await driver.findElement(loginPage.passwordField).isDisplayed();\n    expect(isEmailVisible).to.be.true;\n    expect(isPassVisible).to.be.true;\n    await ExcelReport.addResult({\n        id: tcId,\n        module: platform.name,\n        name: 'Login UI Check',\n        status: 'PASS',\n        time: `${Date.now() - startTime}ms`,\n        remarks: 'Fields visible'\n    });\n} catch (error) {\n    const screenshot = await ScreenshotUtil.takeScreenshot(driver, `Fail_${tcId}`);\n    await ExcelReport.addResult({\n        id: tcId,\n        module: platform.name,\n        name: 'Login UI Check',\n        status: 'FAIL',\n        time: `${Date.now() - startTime}ms`,\n        screenshot: screenshot,\n        remarks: error.message\n    });\n    throw error;\n}",
+              "err": {},
+              "uuid": "488d6414-4b50-45f2-a178-2f61f9d35cf6",
+              "parentUUID": "f05f3c9c-b335-4335-8e3a-cf488b848af7",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "b55dfb85-a079-4963-9798-b6d831a9cae4",
+            "488d6414-4b50-45f2-a178-2f61f9d35cf6"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 2605,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 120000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 120000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "11.7.6"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "SeleniumReport_Final",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "reports/html",
+        "reportFilename": "SeleniumReport_Final"
+      },
+      "version": "6.3.2"
+    }
+  }
+}
